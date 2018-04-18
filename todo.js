@@ -45,9 +45,7 @@ function makeTodo(todoName) {
 	///チェックマーク
 	const checkboxTh = document.createElement('th');
 	checkboxTh.setAttribute('class', 'checkbox_th');
-	const checkBox = document.createElement('input');
-	checkBox.setAttribute('type', 'checkbox');
-	checkboxTh.appendChild(checkBox);
+	checkboxTh.innerHTML = '<input type="checkbox" class="done_check" onclick="onCheck(this)">';
 	todo.appendChild(checkboxTh);
 
 	//text部分
@@ -82,4 +80,13 @@ function onblurEdit(input) {
 
 function onclickErase(button) {
 	button.parentNode.parentNode.remove();
+}
+
+function onCheck(checkBox) {
+	const text = checkBox.parentNode.nextSibling;
+	if(checkBox.checked) {
+		text.setAttribute('class', 'text_ths');
+	} else {
+		text.setAttribute('class', 'text_th');
+	}
 }

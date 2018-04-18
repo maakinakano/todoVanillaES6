@@ -64,4 +64,21 @@ table#todo_input input[type="text"] {
     font-weight: 100;
     height: 50px;
     border: none;
+    text-decoration: none;
 }
+
+.main table#todo_input tr.todo th.text_ths {
+    text-align: left;
+    width: 630px;
+    margin-top: 0px;
+    margin-bottom: -15px;
+    text-indent: 1em;
+    font-size: 30px;
+    font-weight: 100;
+    height: 50px;
+    border: none;
+    color: gainsboro;
+    text-decoration: line-through;
+}
+
+
