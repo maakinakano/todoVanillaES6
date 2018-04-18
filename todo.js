@@ -1,5 +1,10 @@
 function init() {
 	const inputTr = document.createElement('tr');
+	console.log(localStorage['todoNum']);
+	for(let i=0; i<localStorage['todoNum']; i++) {
+		const todoList = document.getElementById("todo_input");
+		todoList.insertBefore(makeTodo(localStorage['todo-' + i]), todoList.firstChild.nextSibling);	
+	}
 	//checkbox
 	const inputCheckboxTh = document.createElement('th');
 	inputCheckboxTh.setAttribute('class', 'checkbox_th');
@@ -11,14 +16,10 @@ function init() {
 	inputTextTh.setAttribute('class', 'input_th');
 	const inputForm = document.createElement('form');
 	inputForm.addEventListener('submit', InputTodo);
-	const input = document.createElement('input');
-	input.setAttribute('type', 'text');
-	input.setAttribute('id', 'input_todo_box');
-	input.setAttribute('autocomplete', 'off');
-	input.setAttribute('placeholder', "What's need to be done?");
-	inputForm.appendChild(input);
+	inputForm.innerHTML = '<input type="text" id="input_todo_box" autocomplete="off", placeholder="Whats need to be done?">';
 	inputTextTh.appendChild(inputForm);
 	inputTr.appendChild(inputTextTh);
+
 	//削除部分
 	const inputEraseTh = document.createElement('th');
 	inputEraseTh.setAttribute('class', 'erase_th');
@@ -31,9 +32,16 @@ function init() {
 function InputTodo(event) {
 	const inputBox = document.getElementById("input_todo_box");
 	const todoList = document.getElementById("todo_input");
-	todoList.insertBefore(makeTodo(inputBox.value), todoList.firstChild.nextSibling);
-	inputBox.value = "";
 	event.preventDefault();
+	if(inputBox.value === ''){
+		return;
+	}
+	todoList.insertBefore(makeTodo(inputBox.value), todoList.firstChild.nextSibling);
+
+	const todoNum = localStorage['todoNum'];
+	localStorage['todo-' + todoNum] = inputBox.value;
+	localStorage['todoNum'] = +todoNum+1;
+	inputBox.value = "";
 }
 
 function makeTodo(todoName) {
@@ -70,7 +78,6 @@ function onClickEdit(div) {
 }
 
 function onBlurEdit(input) {
-	console.log("x");
 	const div = input.parentNode;
 	div.setAttribute('ondblclick', 'onClickEdit(this)');
 	div.innerHTML = input.value;
@@ -99,5 +106,4 @@ function flipDoneTodo(todoText, isDone) {
 	} else {
 		todoText.setAttribute('class', 'text_th');
 	}
-
 }
