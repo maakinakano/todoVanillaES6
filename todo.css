@@ -29,6 +29,10 @@ th.text_th {
     width: 620px;
 }
 
+th.input_th {
+    width: 620px;
+}
+
 th.erase_th {
     width: 25px;
 }
@@ -50,7 +54,7 @@ table#todo_input input[type="text"] {
     height: 60px;
 }
 
-.main table#todo_input tr.todo th div {
+.main table#todo_input tr.todo th.text_th {
     text-align: left;
     width: 630px;
     margin-top: 0px;

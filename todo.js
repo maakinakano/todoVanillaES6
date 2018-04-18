@@ -10,7 +10,7 @@ function init() {
 
 	//text部分
 	const inputTextTh = document.createElement('th');
-	inputTextTh.setAttribute('class', 'text_th');
+	inputTextTh.setAttribute('class', 'input_th');
 	const inputForm = document.createElement('form');
 	inputForm.addEventListener('submit', InputTodo);
 	const input = document.createElement('input');
@@ -53,10 +53,8 @@ function makeTodo(todoName) {
 	//text部分
 	const textTh = document.createElement('th');
 	textTh.setAttribute('class', 'text_th');
-	const todoNameArea = document.createElement('div');
-	todoNameArea.textContent = todoName;
-	todoNameArea.setAttribute('onclick', 'onClickEdit(this)');
-	textTh.appendChild(todoNameArea);
+	textTh.textContent = todoName;
+	textTh.setAttribute('ondblclick', 'onClickEdit(this)');
 	todo.appendChild(textTh);
 
 	//削除部分
@@ -69,11 +67,14 @@ function makeTodo(todoName) {
 
 function onClickEdit(div) {
 	const text = div.textContent;
-	console.log(text);
-//	jQuery(function($){
-//		$('dd').click(function(){
-//			var txt = $(this).text();
-//			$(this).html('<input type="text" value="'+txt+'" />');
-//		});
-//	});
+	div.removeAttribute('onclick');
+	div.innerHTML = '<input type="text" class="input_todo_box" value="'+text+'" onblur="onblurEdit(this)"/>';
+	div.firstChild.focus();
+}
+
+function onblurEdit(input) {
+	console.log("x");
+	const div = input.parentNode;
+	div.setAttribute('ondblclick', 'onClickEdit(this)');
+	div.innerHTML = input.value;
 }
