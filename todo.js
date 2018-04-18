@@ -1,37 +1,68 @@
-const inputform = document.getElementById("input_form");
-inputform.addEventListener('submit', InputTodo);
+function init() {
+	const inputTr = document.createElement('tr');
+	//checkbox
+	const inputCheckboxTh = document.createElement('th');
+	inputCheckboxTh.setAttribute('class', 'checkbox_th');
+	const inputCheckBox = document.createElement('input');
+	inputCheckBox.setAttribute('type', 'checkbox');
+	inputCheckboxTh.appendChild(inputCheckBox);
+	inputTr.appendChild(inputCheckboxTh);
+
+	//text部分
+	const inputTextTh = document.createElement('th');
+	inputTextTh.setAttribute('class', 'text_th');
+	const inputForm = document.createElement('form');
+	inputForm.addEventListener('submit', InputTodo);
+	const input = document.createElement('input');
+	input.setAttribute('type', 'text');
+	input.setAttribute('id', 'input_todo_box');
+	input.setAttribute('autocomplete', 'off');
+	input.setAttribute('placeholder', "What's need to be done?");
+	inputForm.appendChild(input);
+	inputTextTh.appendChild(inputForm);
+	inputTr.appendChild(inputTextTh);
+	//削除部分
+	const inputEraseTh = document.createElement('th');
+	inputEraseTh.setAttribute('class', 'erase_th');
+	inputTr.appendChild(inputEraseTh);
+
+	const todoList = document.getElementById("todo_input");
+	todoList.insertBefore(inputTr, todoList.firstChild);
+}
 
 function InputTodo(event) {
 	const inputBox = document.getElementById("input_todo_box");
-	const todoList = document.getElementById("todo_list");
-	todoList.insertBefore(makeTodo(inputBox.value), todoList.firstChild);
+	const todoList = document.getElementById("todo_input");
+	todoList.insertBefore(makeTodo(inputBox.value), todoList.firstChild.nextSibling);
 	inputBox.value = "";
 	event.preventDefault();
 }
 
 function makeTodo(todoName) {
-	console.log(todoName);
 	const todo = document.createElement('tr');
 	todo.setAttribute('class', 'todo');
-	const checker = document.createElement('th');
-	checker.setAttribute('class', 'checkbox_th');
-	const todoText = document.createElement('th');
-	const erase = document.createElement('th');
 
 	///チェックマーク
+	const checkboxTh = document.createElement('th');
+	checkboxTh.setAttribute('class', 'checkbox_th');
 	const checkBox = document.createElement('input');
 	checkBox.setAttribute('type', 'checkbox');
-	checker.appendChild(checkBox);
-	todo.appendChild(checker);
+	checkboxTh.appendChild(checkBox);
+	todo.appendChild(checkboxTh);
 
 	//text部分
+	const textTh = document.createElement('th');
+	textTh.setAttribute('class', 'text_th');
 	const todoNameArea = document.createElement('div');
 	todoNameArea.textContent = todoName;
 	todoNameArea.setAttribute('onclick', 'onClickEdit(this)');
-	todoText.appendChild(todoNameArea);
-	todo.appendChild(todoText);
+	textTh.appendChild(todoNameArea);
+	todo.appendChild(textTh);
+
 	//削除部分
-	todo.appendChild(erase);
+	const erase_th = document.createElement('th');
+	erase_th.setAttribute('class', 'erase_th');
+	todo.appendChild(erase_th);
 
 	return todo;
 }
