@@ -3,9 +3,7 @@ function init() {
 	//checkbox
 	const inputCheckboxTh = document.createElement('th');
 	inputCheckboxTh.setAttribute('class', 'checkbox_th');
-	const inputCheckBox = document.createElement('input');
-	inputCheckBox.setAttribute('type', 'checkbox');
-	inputCheckboxTh.appendChild(inputCheckBox);
+	inputCheckboxTh.innerHTML = '<input type="checkbox" onclick="onCheckAll(this)">';
 	inputTr.appendChild(inputCheckboxTh);
 
 	//text部分
@@ -67,11 +65,11 @@ function makeTodo(todoName) {
 function onClickEdit(div) {
 	const text = div.textContent;
 	div.removeAttribute('onclick');
-	div.innerHTML = '<input type="text" class="input_todo_box" value="'+text+'" onblur="onblurEdit(this)"/>';
+	div.innerHTML = '<input type="text" class="input_todo_box" value="'+text+'" onblur="onBlurEdit(this)"/>';
 	div.firstChild.focus();
 }
 
-function onblurEdit(input) {
+function onBlurEdit(input) {
 	console.log("x");
 	const div = input.parentNode;
 	div.setAttribute('ondblclick', 'onClickEdit(this)');
@@ -84,9 +82,22 @@ function onclickErase(button) {
 
 function onCheck(checkBox) {
 	const text = checkBox.parentNode.nextSibling;
-	if(checkBox.checked) {
-		text.setAttribute('class', 'text_ths');
-	} else {
-		text.setAttribute('class', 'text_th');
+	flipDoneTodo(text, checkBox.checked);
+}
+
+function onCheckAll(checkBox) {
+	const checkBoxes = document.getElementsByClassName('done_check');
+	for(let i=0; i<checkBoxes.length; i++){
+		checkBoxes[i].checked = checkBox.checked;
+		flipDoneTodo(checkBoxes[i].parentNode.nextSibling, checkBox.checked);
 	}
+}
+
+function flipDoneTodo(todoText, isDone) {
+	if(isDone) {
+		todoText.setAttribute('class', 'text_ths');
+	} else {
+		todoText.setAttribute('class', 'text_th');
+	}
+
 }
