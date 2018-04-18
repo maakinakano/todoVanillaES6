@@ -60,6 +60,7 @@ function makeTodo(todoName) {
 	//削除部分
 	const erase_th = document.createElement('th');
 	erase_th.setAttribute('class', 'erase_th');
+	erase_th.innerHTML = '<input type="button" onclick="onclickErase(this)">';
 	todo.appendChild(erase_th);
 
 	return todo;
@@ -77,4 +78,8 @@ function onblurEdit(input) {
 	const div = input.parentNode;
 	div.setAttribute('ondblclick', 'onClickEdit(this)');
 	div.innerHTML = input.value;
+}
+
+function onclickErase(button) {
+	button.parentNode.parentNode.remove();
 }
