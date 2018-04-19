@@ -1,5 +1,7 @@
 function init() {
-//	localStorage['todoNum']=0;
+	if(localStorage['todoNum'] == '') {
+		localStorage['todoNum']=0;
+	}
 	const inputTr = document.createElement('tr');
 	const todoList = document.getElementById("todo_input");
 	
