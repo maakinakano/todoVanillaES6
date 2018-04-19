@@ -4,7 +4,10 @@ function init() {
 	const todoList = document.getElementById("todo_input");
 	
 	for(let i=0; i<localStorage['todoNum']; i++) {
-		const todoData = JSON.parse(localStorage['todo-' + i]);
+		const todoData = readStrage(i);
+		if(!todoData) {
+			continue;
+		}
 		console.log(todoData);
 		todoList.insertBefore(makeTodo(todoData['name'], i, todoData['isDone']), todoList.firstChild.nextSibling);	
 	}
@@ -93,11 +96,14 @@ function onClickEdit(div) {
 
 function onBlurEdit(input) {
 	const div = input.parentNode;
+	const name = input.value;
 	div.setAttribute('ondblclick', 'onClickEdit(this)');
-	div.innerHTML = input.value;
+	div.innerHTML = name;
+	editTodoName(div.parentNode.getAttribute('name'), name);
 }
 
 function onclickErase(button) {
+	removeStrage(button.parentNode.parentNode.getAttribute('name'));
 	button.parentNode.parentNode.remove();
 }
 
@@ -123,11 +129,4 @@ function flipDoneTodo(todoText, isDone) {
 	} else {
 		todoText.setAttribute('class', 'text_th');
 	}
-}
-
-function writeStrage(id, name, isDone) {
-	const todoData = {};
-	todoData['name'] = name;
-	todoData['isDone'] = isDone;
-	localStorage['todo-' + id] = JSON.stringify(todoData);
 }
