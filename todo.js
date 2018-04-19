@@ -1,9 +1,12 @@
 function init() {
+//	localStorage['todoNum']=0;
 	const inputTr = document.createElement('tr');
-	console.log(localStorage['todoNum']);
+	const todoList = document.getElementById("todo_input");
+	
 	for(let i=0; i<localStorage['todoNum']; i++) {
-		const todoList = document.getElementById("todo_input");
-		todoList.insertBefore(makeTodo(localStorage['todo-' + i]), todoList.firstChild.nextSibling);	
+		const todoData = JSON.parse(localStorage['todo-' + i]);
+		console.log(todoData);
+		todoList.insertBefore(makeTodo(todoData['name'], i, todoData['isDone']), todoList.firstChild.nextSibling);	
 	}
 	//checkbox
 	const inputCheckboxTh = document.createElement('th');
@@ -25,38 +28,49 @@ function init() {
 	inputEraseTh.setAttribute('class', 'erase_th');
 	inputTr.appendChild(inputEraseTh);
 
-	const todoList = document.getElementById("todo_input");
 	todoList.insertBefore(inputTr, todoList.firstChild);
 }
 
 function InputTodo(event) {
-	const inputBox = document.getElementById("input_todo_box");
-	const todoList = document.getElementById("todo_input");
 	event.preventDefault();
+	const inputBox = document.getElementById("input_todo_box");
 	if(inputBox.value === ''){
 		return;
 	}
-	todoList.insertBefore(makeTodo(inputBox.value), todoList.firstChild.nextSibling);
 
+	const todoList = document.getElementById("todo_input");
+	const todoName = inputBox.value;
 	const todoNum = localStorage['todoNum'];
-	localStorage['todo-' + todoNum] = inputBox.value;
+
+	todoList.insertBefore(makeTodo(todoName, todoNum), todoList.firstChild.nextSibling);
+	writeStrage(todoNum, todoName, false);
 	localStorage['todoNum'] = +todoNum+1;
 	inputBox.value = "";
 }
 
-function makeTodo(todoName) {
+
+function makeTodo(todoName, todoId, isDone = false) {
 	const todo = document.createElement('tr');
 	todo.setAttribute('class', 'todo');
+	todo.setAttribute('name', todoId);
 
 	///チェックマーク
 	const checkboxTh = document.createElement('th');
 	checkboxTh.setAttribute('class', 'checkbox_th');
-	checkboxTh.innerHTML = '<input type="checkbox" class="done_check" onclick="onCheck(this)">';
+	if(isDone) {
+		checkboxTh.innerHTML = '<input type="checkbox" class="done_check" onclick="onCheck(this)" checked=true>';
+	} else {
+		checkboxTh.innerHTML = '<input type="checkbox" class="done_check" onclick="onCheck(this)">';
+	}
 	todo.appendChild(checkboxTh);
 
 	//text部分
 	const textTh = document.createElement('th');
-	textTh.setAttribute('class', 'text_th');
+	if(isDone) {
+		textTh.setAttribute('class', 'text_ths');
+	} else {
+		textTh.setAttribute('class', 'text_th');
+	}
 	textTh.textContent = todoName;
 	textTh.setAttribute('ondblclick', 'onClickEdit(this)');
 	todo.appendChild(textTh);
@@ -101,9 +115,19 @@ function onCheckAll(checkBox) {
 }
 
 function flipDoneTodo(todoText, isDone) {
+	const id = todoText.parentNode.getAttribute('name');
+	const name = todoText.textContent;
+	writeStrage(id, name, isDone);
 	if(isDone) {
 		todoText.setAttribute('class', 'text_ths');
 	} else {
 		todoText.setAttribute('class', 'text_th');
 	}
+}
+
+function writeStrage(id, name, isDone) {
+	const todoData = {};
+	todoData['name'] = name;
+	todoData['isDone'] = isDone;
+	localStorage['todo-' + id] = JSON.stringify(todoData);
 }
